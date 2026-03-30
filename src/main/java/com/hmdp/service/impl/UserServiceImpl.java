@@ -12,6 +12,7 @@ import com.hmdp.entity.User;
 import com.hmdp.mapper.UserMapper;
 import com.hmdp.service.IUserService;
 import com.hmdp.utils.RegexUtils;
+import com.hmdp.utils.UserHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -114,5 +115,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         // 3.返回用户
         return user;
+    }
+
+    @Override
+    public Result logout(String token) {
+        // 1. 检查token是否为空
+        if (token != null && !token.isEmpty()) {
+            // 从Redis中删除对应的用户信息
+            stringRedisTemplate.delete(LOGIN_USER_KEY + token);
+        }
+        // 2. 清空当前线程的用户信息
+        UserHolder.removeUser();
+        // 3. 返回成功
+        return Result.ok("登出成功");
     }
 }
