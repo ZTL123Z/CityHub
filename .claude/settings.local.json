@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(xargs grep:*)",
+      "Bash(redis-cli -a 123456 ping)",
+      "Bash(findstr :6379)",
+      "Bash(mvn compile:*)"
+    ]
+  }
+}

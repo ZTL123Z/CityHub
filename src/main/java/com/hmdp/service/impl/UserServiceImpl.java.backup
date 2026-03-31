@@ -121,17 +121,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public Result logout(String token) {
         // 1. 检查token是否为空
         if (token != null && !token.isEmpty()) {
-            try {
-                // 从Redis中删除对应的用户信息
-                String redisKey = LOGIN_USER_KEY + token;
-                Boolean deleted = stringRedisTemplate.delete(redisKey);
-                log.debug("登出删除Redis token: {}, 结果: {}", redisKey, deleted);
-            } catch (Exception e) {
-                log.warn("删除Redis token失败: {}", e.getMessage());
-                // 即使删除失败也继续执行，因为可能是token已过期
-            }
-        } else {
-            log.warn("登出请求中的token为空");
+            // 从Redis中删除对应的用户信息
+            stringRedisTemplate.delete(LOGIN_USER_KEY + token);
         }
         // 2. 清空当前线程的用户信息
         UserHolder.removeUser();

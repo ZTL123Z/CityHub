@@ -101,18 +101,6 @@
 <script src="./js/common.js"></script>
 <script src="./js/footer.js"></script>
 <script>
-  // 页面加载时检查登录状态
-  (function checkLoginOnLoad() {
-    // 获取token
-    let token = sessionStorage.getItem("token");
-    if (!token) {
-      location.href = "/login.html";
-      return;
-    }
-    // 如果有token，尝试验证（可选，因为后续请求会验证）
-    // 这里不进行异步验证，因为Vue created()中会验证
-  })();
-
   const app = new Vue({
     el: "#app",
     data: {
@@ -129,30 +117,10 @@
       isReachBottom: false,
     },
     created() {
-      this.checkLogin();
       this.queryUser();
+      this.queryLoginUser();
     },
     methods: {
-      checkLogin() {
-        // 获取token
-        let token = sessionStorage.getItem("token");
-        if (!token) {
-          location.href = "/login.html";
-          return;
-        }
-        // 查询用户信息验证token
-        axios.get("/user/me")
-          .then()
-          .catch(err => {
-            // 如果是401未授权，立即跳转到登录页面
-            if (err.response && err.response.status === 401) {
-              location.href = "/login.html";
-            } else {
-              // 其他错误，显示错误信息
-              this.$message.error(err);
-            }
-          })
-      },
       load() {
         this.count += 2;
       },
